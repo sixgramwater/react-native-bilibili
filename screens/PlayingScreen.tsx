@@ -14,20 +14,28 @@ const WIDTH = Dimensions.get("screen").width;
 
 const PlayingScreen = () => {
   const navigation = useNavigation();
-  const { avid, cid } = useRoute<any>().params;
+  const { avid, cid: initCid } = useRoute<any>().params;
+  const [cid, setCid] = useState(initCid);
   const [url, setUrl] = useState<string | undefined>();
-  // const replyCount = 
+  const handleSetCid = (cid: number) => {
+    setCid(cid);
+  };
+  // const replyCount =
   const fetchVideo = () => {
-    return fetchVideoUrlNoReferer(avid, cid).then((res) => {
-      console.log(res);
-      const urlList = res.data.durl;
-      // console.log(res);
-      // console.log(urlList[0].url, urlList[0].backup_url);
-      setUrl(urlList[0].url);
-    }).catch(err => {
-      console.log(err);
-      console.error(err);
-    })
+    console.log("fetchUrl from avid, cid", avid, cid);
+    if (cid === -1) return;
+    return fetchVideoUrlNoReferer(avid, cid)
+      .then((res) => {
+        console.log(res);
+        const urlList = res.data.durl;
+        // console.log(res);
+        // console.log(urlList[0].url, urlList[0].backup_url);
+        setUrl(urlList[0].url);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.error(err);
+      });
   };
   useEffect(() => {
     // console.log(avid, cid);
@@ -38,7 +46,7 @@ const PlayingScreen = () => {
       id: 0,
       name: "简介",
       screen: "desc",
-      component: <PlayingInfo aid={avid} />,
+      component: <PlayingInfo aid={avid} onLoadCid={handleSetCid} />,
     },
     {
       id: 1,

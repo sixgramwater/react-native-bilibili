@@ -34,7 +34,7 @@ export const formatDate = (date?: number) => {
   return dateString.substring(0, 10) + " " + dateString.substring(11, 16);
 };
 
-const PlayingInfo = ({ aid }: { aid: number }) => {
+const PlayingInfo = ({ aid, onLoadCid }: { aid: number, onLoadCid?: (cid: number) => void }) => {
   const [info, setInfo] = useState<PlayingInfoType>();
   const [relatedList, setRelatedList] = useState<RecommendVideoInfo[]>([]);
   const mappedCardList: CardProps[] = !relatedList
@@ -60,7 +60,9 @@ const PlayingInfo = ({ aid }: { aid: number }) => {
     return fetchVideoInfo(aid)
       .then((res) => {
         const videoInfo: VideoInfo = res.data;
+        const cid = videoInfo.cid;
         setInfo(videoInfo);
+        onLoadCid && onLoadCid(cid);
       })
       .catch((err) => {
         console.error(err);

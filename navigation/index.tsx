@@ -146,6 +146,7 @@ function BottomTabNavigator() {
         options={{
           title: "我的",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          headerShown: false
         }}
       />
     </BottomTab.Navigator>
