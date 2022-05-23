@@ -1,8 +1,9 @@
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import tw from "twrnc";
 import { store_get, STORE_KEYS, store_set } from "../../utils/store";
+import { fetchTrends } from "../../api";
 
 const WIDTH = Dimensions.get("screen").width;
 
@@ -23,9 +24,15 @@ const HistoryItem = ({
   );
 };
 
+type hotlistItem = {
+  keyword: string;
+  show_name: string;
+  icon?: string | null;
+};
+
 const SearchSuggest = React.memo(
   ({ onPress }: { onPress?: (keyword: string) => void }) => {
-    const [hotlist, setHotlist] = useState([]);
+    const [hotlist, setHotlist] = useState<hotlistItem[]>([]);
     const [historyList, setHistoryList] = useState<string[]>([]);
     useEffect(() => {
       store_get(STORE_KEYS.SEARCH_HISTORY).then((value: any[] | undefined) => {
@@ -41,7 +48,26 @@ const SearchSuggest = React.memo(
         // setHistoryList(value);
       });
     }, []);
-
+    const fetchTrendsData = () => {
+      return fetchTrends()
+        .then((res) => {
+          const list = res.data.trending?.list;
+          const mappedList = list?.map((item: any) => {
+            return {
+              keyword: item.keyword,
+              show_name: item.show_name,
+              icon: item.icon === "" ? null : item.icon,
+            };
+          });
+          setHotlist(mappedList);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    useEffect(() => {
+      fetchTrendsData();
+    }, []);
     const handleDeleteHistory = () => {
       store_set(STORE_KEYS.SEARCH_HISTORY, []);
       setHistoryList([]);
@@ -54,30 +80,22 @@ const SearchSuggest = React.memo(
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>热搜</Text>
           <View style={styles.hotlist}>
-            <View style={styles.hotItem}>
-              <Text style={styles.index}>1</Text>
-              <Text numberOfLines={1}>路边便宜豆浆能喝吗</Text>
-            </View>
-            <View style={styles.hotItem}>
-              <Text style={styles.index}>1</Text>
-              <Text numberOfLines={1}>路边便宜豆浆能喝吗</Text>
-            </View>
-            <View style={styles.hotItem}>
-              <Text style={styles.index}>1</Text>
-              <Text numberOfLines={1}>路边便宜豆浆能喝吗</Text>
-            </View>
-            <View style={styles.hotItem}>
-              <Text style={styles.index}>1</Text>
-              <Text numberOfLines={1}>路边便宜豆浆能喝吗</Text>
-            </View>
-            <View style={styles.hotItem}>
-              <Text style={styles.index}>1</Text>
-              <Text numberOfLines={1}>路边便宜豆浆能喝吗</Text>
-            </View>
-            <View style={styles.hotItem}>
-              <Text style={styles.index}>1</Text>
-              <Text numberOfLines={1}>路边便宜豆浆能喝吗</Text>
-            </View>
+            {hotlist.length === 0 ? (
+              <Text>暂无热搜数据</Text>
+            ) : (
+              hotlist?.map((item, index) => (
+                <View style={styles.hotItem} key={index}>
+                  <Text style={styles.index}>{index + 1}</Text>
+                  <Text numberOfLines={1}>{item.show_name}</Text>
+                  {item.icon && (
+                    <Image
+                      style={{ width: 14, height: 14, marginLeft: 4 }}
+                      source={{uri: item.icon}}
+                    />
+                  )}
+                </View>
+              ))
+            )}
           </View>
         </View>
         <View style={styles.sectionContainer}>
@@ -149,6 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 6,
     width: WIDTH / 2 - 12,
+    alignItems: 'center',
   },
   index: {
     marginRight: 8,

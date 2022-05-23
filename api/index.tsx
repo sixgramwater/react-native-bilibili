@@ -65,10 +65,14 @@ export const qrLogin = (key: string) =>
 export const fetchUserNav = () =>
   inst.get("http://api.bilibili.com/nav").then((value) => value.data);
 
-
 export const fetchSearchDefault = (keyword: string) =>
   inst
     .get("http://api.bilibili.com/x/web-interface/search/all/v2", {
       params: { keyword },
     })
+    .then((value) => value.data);
+
+export const fetchTrends = () =>
+  inst
+    .get("https://api.bilibili.com/x/web-interface/search/square?limit=10")
     .then((value) => value.data);
