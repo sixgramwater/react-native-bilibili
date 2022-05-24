@@ -15,3 +15,13 @@ export const formatDate = (date?: number) => {
   return dateString.substring(0, 10) + " " + dateString.substring(11, 16);
 };
 
+export const getMinutesSecondsFromMilliseconds = (ms: number) => {
+  const totalSeconds = ms / 1000;
+  const seconds = String(Math.floor(totalSeconds % 60));
+  const minutes = String(Math.floor(totalSeconds / 60));
+
+  return minutes.padStart(1, "0") + ":" + seconds.padStart(2, "0");
+};
+
+export const backgroundLinearImage =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAC0CAYAAABVEkZPAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACaSURBVHgBlZLbDsQgCETLYP//i5UVtkYhuG59IFzODGnKdZ0eQWMSaFfST2TL0bmHXS+bhoBzD2+ybMAJgp0WiXb2ghWDmYFaa8ZBH6O1Nv1KwrGB32zAnLg8nGXDau4ti4z60+yGiFhZNAvOIdzKQbmy9MIX2V/t3HM+HbZSNAt3JcgOzrQmc/A6cIhEgwH/v9L1xG8j77coPnsUOUD2dBlAAAAAAElFTkSuQmCC";

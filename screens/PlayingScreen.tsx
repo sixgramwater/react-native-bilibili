@@ -63,7 +63,7 @@ const PlayingScreen = () => {
         <View style={styles.videoContainer}>
           <VideoPlayer src={url} />
         </View>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <Pressable
             android_ripple={{
               radius: 14,
@@ -103,8 +103,7 @@ const PlayingScreen = () => {
               />
             </Pressable>
           </View>
-          {/* <Text>123</Text> */}
-        </View>
+        </View> */}
         <View style={styles.infoContainer}>
           <ScrollableTabs tabs={tabs} />
           {/* <Text>PlayingScreen</Text>
@@ -123,22 +122,7 @@ const styles = StyleSheet.create({
     height: (WIDTH * 9) / 16,
     backgroundColor: "#000",
   },
-  header: {
-    paddingHorizontal: 12,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    width: "100%",
-    // left: 0,
-    // display: "flex",
-    flexDirection: "row",
-    height: 36,
-    justifyContent: "space-between",
-    alignItems: "center",
-    // backgroundColor: "#fff",
-  },
-  backButton: {},
+  
   infoContainer: {
     flex: 1,
   },

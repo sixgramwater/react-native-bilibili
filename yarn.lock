@@ -1898,6 +1898,11 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/slider@4.2.1":
+  version "4.2.1"
+  resolved "https://registry.npmmirror.com/@react-native-community/slider/-/slider-4.2.1.tgz#8f1c8cf62de1bd91ce1e32585f7eb666f21e5025"
+  integrity sha512-6HUS5HbB9bvEN4GiwBlxECgPWQIugHE+kfnxqX2jHUl1SE57MRpw00m1qVs4hXtEPQndBl6mAQiGbKCOtLPVbg==
+
 "@react-native-community/viewpager@^2.0.1":
   version "2.0.2"
   resolved "https://registry.npmmirror.com/@react-native-community/viewpager/-/viewpager-2.0.2.tgz#622b190294b1310c4825c98daeaee1c8443f7124"
@@ -3952,6 +3957,13 @@ expo-av@~11.2.3:
   version "11.2.3"
   resolved "https://registry.npmmirror.com/expo-av/-/expo-av-11.2.3.tgz#254242dae76e3cd60ef9d9c33618e4a12d37aa33"
   integrity sha512-ptTe96s33Ct0eOsOmNTvtaWFx4B0SDkQmDfPbiuX/C2afqbLQf8geEopw7BRO8ZZl7Qe3qBMH6YLHXKTkZkTyQ==
+  dependencies:
+    "@expo/config-plugins" "^4.0.14"
+
+expo-brightness@~10.2.0:
+  version "10.2.0"
+  resolved "https://registry.npmmirror.com/expo-brightness/-/expo-brightness-10.2.0.tgz#38531e87ba876f91ccedb797e9dd075422e0f9af"
+  integrity sha512-ZFUJWj9tt6WqUG7Ub6C+X3vS+1ti8NitV5NjroxKVXl1Pl3tyKccM3QjWSfrhLkncTXA3Tm+0zMvxTsHw4nu5w==
   dependencies:
     "@expo/config-plugins" "^4.0.14"
 
