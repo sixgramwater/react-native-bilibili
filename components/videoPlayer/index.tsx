@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   Button,
   Dimensions,
+  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
@@ -9,15 +10,20 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
-import { AntDesign, createMu, FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, createMu, Feather, FontAwesome5 } from "@expo/vector-icons";
 import navigation from "../../navigation";
 import { useNavigation } from "@react-navigation/core";
 import Slider from "@react-native-community/slider";
 import Colors from "../../constants/Colors";
-import { getMinutesSecondsFromMilliseconds } from "../../utils";
+import {
+  backgroundLinearImage,
+  getMinutesSecondsFromMilliseconds,
+} from "../../utils";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const WIDTH = Dimensions.get("screen").width;
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
+import * as Brightness from "expo-brightness";
 
 export enum ControlStates {
   Visible = "Visible",
@@ -68,7 +74,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     props.defaultControlsVisible ? ControlStates.Visible : ControlStates.Hidden
   );
   const [panProgress, setPanProgress] = useState(0);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0.4);
+  const [brightness, setBrightness] = useState(0.5);
+  const [brightnessPermitted, setBrightnessPermitted] = useState(false);
   const [showControlModal, setShowControlModal] = useState<ShowControlModal>(
     ShowControlModal.Hidden
   );
@@ -85,15 +93,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   const fetchStatusAndUpdate = () => {
     video.current?.getStatusAsync().then((status) => {
       updatePlaybackCallback(status);
-      if(!isPanning && status.isLoaded) {
+      if (!isPanning && status.isLoaded) {
         // console.log('update panprogress')
-        setPanProgress(status.positionMillis)
+        setPanProgress(status.positionMillis);
       }
     });
   };
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Brightness.requestPermissionsAsync();
+      if (status === "granted") {
+        setBrightnessPermitted(true);
+        // Brightness.setSystemBrightnessAsync(1);
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     if (playbackInstanceInfo.state === PlaybackStates.Playing) {
-      
       fetchTimer = setInterval(fetchStatusAndUpdate, 1000);
     }
     return () => {
@@ -119,7 +137,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     } else if (controlsState === ControlStates.Visible) {
       // hideAnimation()
       setControlsState(ControlStates.Hidden);
-      if(controlsTimer) {
+      if (controlsTimer) {
         clearTimeout(controlsTimer);
       }
     }
@@ -156,12 +174,38 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     });
   doubleTabGesture.config = { numberOfTaps: 2 };
 
+  const verticalGestureRight = Gesture.Pan()
+    .onStart(() => {
+      setShowControlModal(ShowControlModal.Volume);
+    })
+    .onUpdate((e) => {
+      const ratio = -e.translationY / (HEIGHT - 72) + volume;
+      const targetRatio = ratio < 0 ? 0 : ratio > 1 ? 1 : ratio;
+      setVolume(targetRatio);
+    })
+    .onEnd(() => {
+      setShowControlModal(ShowControlModal.Hidden);
+    });
+
+  const verticalGestureLeft = Gesture.Pan()
+    .onStart(() => {
+      setShowControlModal(ShowControlModal.Light);
+    })
+    .onUpdate((e) => {
+      const ratio = -e.translationY / (HEIGHT - 72) + brightness;
+      const targetRatio = ratio < 0 ? 0 : ratio > 1 ? 1 : ratio;
+      setBrightness(targetRatio);
+      Brightness.setBrightnessAsync(targetRatio);
+    })
+    .onEnd(() => {
+      setShowControlModal(ShowControlModal.Hidden);
+    });
+
   const horizontalGesture = Gesture.Pan()
     .onStart(() => {
       setShowControlModal(ShowControlModal.Progress);
       // setPanProgress(playbackInstanceInfo.position);
       setIsPanning(true);
-
     })
     .onUpdate((e) => {
       const ratio = e.translationX / WIDTH;
@@ -176,7 +220,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
           : offsetProgress > playbackInstanceInfo.duration
           ? playbackInstanceInfo.duration
           : offsetProgress;
-      
+
       setPanProgress(targetProgress);
     })
     .onEnd(async () => {
@@ -192,7 +236,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
       });
       setIsPanning(false);
       setShowControlModal(ShowControlModal.Hidden);
-    })
+    });
 
   const togglePlay = async () => {
     const shouldPlay = playbackInstanceInfo.state !== PlaybackStates.Playing;
@@ -250,6 +294,103 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
       }
     }
   };
+
+  const renderModal = () => {
+    if (showControlModal === ShowControlModal.Progress)
+      return (
+        <View style={styles.modal}>
+          <Text style={{ color: "#fff", fontSize: 12, fontWeight: "700" }}>
+            {getMinutesSecondsFromMilliseconds(
+              panProgress
+              // playbackInstanceInfo.position
+            )}
+            /{getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
+          </Text>
+        </View>
+      );
+    if (showControlModal === ShowControlModal.Volume)
+    return (
+      <View
+        style={[
+          styles.modal,
+          {
+            width: "33%",
+          },
+        ]}
+      >
+        {/* <View> */}
+        <MaterialCommunityIcons
+          name={volume === 0 ? "volume-mute" : "volume-high"}
+          color="#fff"
+          size={18}
+          style={{ marginRight: 12 }}
+        />
+        {/* </View> */}
+        <View
+          style={{
+            position: "relative",
+            height: 2,
+            backgroundColor: "hsla(0,0%,100%,.2)",
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              top: 0,
+              backgroundColor: Colors.light.tint,
+              width: volume * 100 + "%",
+              height: "100%",
+            }}
+          ></View>
+        </View>
+      </View>
+    );
+    if (showControlModal === ShowControlModal.Light)
+      return (
+        <View
+          style={[
+            styles.modal,
+            {
+              width: "33%",
+            },
+          ]}
+        >
+          {/* <View> */}
+          <Feather
+            name={"sun"}
+            color="#fff"
+            size={18}
+            style={{ marginRight: 12 }}
+          />
+          {/* </View> */}
+          <View
+            style={{
+              position: "relative",
+              height: 2,
+              backgroundColor: "hsla(0,0%,100%,.2)",
+              flex: 1,
+            }}
+          >
+            <View
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+                backgroundColor: Colors.light.tint,
+                width: brightness * 100 + "%",
+                height: "100%",
+              }}
+            ></View>
+          </View>
+        </View>
+      );
+  };
   return (
     <View style={styles.videoContainer}>
       <Video
@@ -263,6 +404,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
         // progressUpdateIntervalMillis={1000}
         // useNativeControls
         resizeMode={ResizeMode.CONTAIN}
+        volume={volume}
         // isLooping
         onPlaybackStatusUpdate={(status) => updatePlaybackCallback(status)}
       />
@@ -327,28 +469,56 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
             playbackInstanceInfo.state === PlaybackStates.Loading ? (
               <ActivityIndicator color={"#fff"} size="large" />
             ) : (
-              showControlModal === ShowControlModal.Progress && (
-                <View style={styles.modal}>
-                  <Text
-                    style={{ color: "#fff", fontSize: 12, fontWeight: "700" }}
-                  >
-                    {getMinutesSecondsFromMilliseconds(
-                      panProgress
-                      // playbackInstanceInfo.position
-                    )}
-                    /
-                    {getMinutesSecondsFromMilliseconds(
-                      playbackInstanceInfo.duration
-                    )}
-                  </Text>
-                </View>
-              )
+              renderModal()
+              // showControlModal === ShowControlModal.Progress && (
+              //   <View style={styles.modal}>
+              //     <Text
+              //       style={{ color: "#fff", fontSize: 12, fontWeight: "700" }}
+              //     >
+              //       {getMinutesSecondsFromMilliseconds(
+              //         panProgress
+              //         // playbackInstanceInfo.position
+              //       )}
+              //       /
+              //       {getMinutesSecondsFromMilliseconds(
+              //         playbackInstanceInfo.duration
+              //       )}
+              //     </Text>
+              //   </View>
+              // )
             )}
+            <GestureDetector gesture={verticalGestureLeft}>
+              <View
+                style={{
+                  width: "40%",
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                }}
+              ></View>
+            </GestureDetector>
+            <GestureDetector gesture={verticalGestureRight}>
+              <View
+                style={{
+                  width: "40%",
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                }}
+              ></View>
+            </GestureDetector>
           </View>
         </GestureDetector>
 
-        {controlsState === ControlStates.Visible && (
+        {controlsState === ControlStates.Visible ? (
           <View style={styles.footContainer}>
+            {/* <ImageBackground source={{uri: backgroundLinearImage}} resizeMode={'stretch'} style={{
+              // width: WIDTH,
+              // height: 36,
+              flex: 1,
+            }}> */}
             <Pressable onPress={togglePlay}>
               <View style={styles.icon}>
                 <FontAwesome5
@@ -372,8 +542,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
               // }
               value={
                 playbackInstanceInfo.duration
-                  ? panProgress /
-                    playbackInstanceInfo.duration
+                  ? panProgress / playbackInstanceInfo.duration
                   : 0
               }
               minimumTrackTintColor={Colors.light.tint}
@@ -417,6 +586,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
                 <FontAwesome5 name="expand" color={"#fff"} size={20} />
               </View>
             </Pressable>
+            {/* </ImageBackground> */}
+          </View>
+        ) : (
+          // playbackInstanceInfo.state !== PlaybackStates.Loading &&
+          <View style={styles.footProgress}>
+            <View
+              style={{
+                backgroundColor: Colors.light.tint,
+                height: "100%",
+                width:
+                  playbackInstanceInfo.duration === 0
+                    ? 0
+                    : (playbackInstanceInfo.position /
+                        playbackInstanceInfo.duration) *
+                        100 +
+                      "%",
+                // width:
+                //   (playbackInstanceInfo.position /
+                //     playbackInstanceInfo.duration) *
+                //   WIDTH,
+              }}
+            ></View>
           </View>
         )}
 
@@ -480,6 +671,9 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: "rgba(0,0,0,0.7)",
     borderRadius: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   footContainer: {
     // height: 36,
@@ -499,5 +693,17 @@ const styles = StyleSheet.create({
   },
   slider: {
     flex: 1,
+  },
+  footProgress: {
+    height: 3,
+    position: "absolute",
+    width: "100%",
+    bottom: 0,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    left: 0,
+    right: 0,
+    // backgroundColor: '#fff',
+    // backgroundColor: Colors.light.tint
   },
 });
