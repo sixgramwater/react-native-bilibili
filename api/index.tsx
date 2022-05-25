@@ -76,3 +76,40 @@ export const fetchTrends = () =>
   inst
     .get("https://api.bilibili.com/x/web-interface/search/square?limit=10")
     .then((value) => value.data);
+
+const httpGet = (
+  url: string,
+  responseType: XMLHttpRequestResponseType
+  // args: string
+) => {
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      if (this.status >= 200 && this.status < 300) {
+        resolve(this.response);
+      } else {
+        reject(new Error(this.status + " " + this.statusText));
+      }
+    };
+    xhr.onerror = function () {
+      reject(new Error(this.status + " " + this.statusText));
+    };
+
+    xhr.open("GET", url);
+
+    xhr.responseType = responseType;
+    xhr.send();
+  });
+};
+
+// export const fetchDanmuXml = (cid: number) =>
+//   httpGet(`http://api.bilibili.com/x/v1/dm/list.so?oid=${cid}`, "text").then(
+//     (value) => {
+//       console.log(value);
+//       return value;
+//     }
+//   );
+export const fetchDanmuXml = (cid: number) =>
+  axios
+    .get(`http://124.221.204.216:5000/danmuXml/${cid}`)
+    .then((value) => value.data);

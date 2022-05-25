@@ -24,6 +24,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import * as Brightness from "expo-brightness";
+import Danmu from "../danmu";
 
 export enum ControlStates {
   Visible = "Visible",
@@ -309,46 +310,46 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
         </View>
       );
     if (showControlModal === ShowControlModal.Volume)
-    return (
-      <View
-        style={[
-          styles.modal,
-          {
-            width: "33%",
-          },
-        ]}
-      >
-        {/* <View> */}
-        <MaterialCommunityIcons
-          name={volume === 0 ? "volume-mute" : "volume-high"}
-          color="#fff"
-          size={18}
-          style={{ marginRight: 12 }}
-        />
-        {/* </View> */}
+      return (
         <View
-          style={{
-            position: "relative",
-            height: 2,
-            backgroundColor: "hsla(0,0%,100%,.2)",
-            flex: 1,
-          }}
+          style={[
+            styles.modal,
+            {
+              width: "33%",
+            },
+          ]}
         >
+          {/* <View> */}
+          <MaterialCommunityIcons
+            name={volume === 0 ? "volume-mute" : "volume-high"}
+            color="#fff"
+            size={18}
+            style={{ marginRight: 12 }}
+          />
+          {/* </View> */}
           <View
             style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              top: 0,
-              backgroundColor: Colors.light.tint,
-              width: volume * 100 + "%",
-              height: "100%",
+              position: "relative",
+              height: 2,
+              backgroundColor: "hsla(0,0%,100%,.2)",
+              flex: 1,
             }}
-          ></View>
+          >
+            <View
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+                backgroundColor: Colors.light.tint,
+                width: volume * 100 + "%",
+                height: "100%",
+              }}
+            ></View>
+          </View>
         </View>
-      </View>
-    );
+      );
     if (showControlModal === ShowControlModal.Light)
       return (
         <View
@@ -618,6 +619,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
           }
         /> */}
       </View>
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            // zIndex: 1000,
+          },
+        ]}
+      >
+        <Danmu />
+      </View>
     </View>
   );
 };
@@ -639,6 +650,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     left: 0,
+    zIndex: 9999,
   },
   header: {
     paddingHorizontal: 12,
