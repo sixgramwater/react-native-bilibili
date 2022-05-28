@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { AntDesign, createMu, Feather, FontAwesome5 } from "@expo/vector-icons";
 import navigation from "../../navigation";
@@ -18,13 +18,15 @@ import Colors from "../../constants/Colors";
 import {
   backgroundLinearImage,
   getMinutesSecondsFromMilliseconds,
+  parseDanmuToJSON,
 } from "../../utils";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import * as Brightness from "expo-brightness";
-import Danmu from "../danmu";
+import Danmu, { DanmakuRef, DanmuType } from "../danmu";
+import { fetchDanmuXml } from "../../api";
 
 export enum ControlStates {
   Visible = "Visible",
@@ -61,9 +63,11 @@ export type ErrorType = {
 export interface VideoPlayerProps {
   src?: string;
   defaultControlsVisible?: boolean;
+  cid?: number;
+  showDanmu?: boolean;
 }
-const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
-  const { src } = props;
+const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
+  const { src, cid } = props;
   let initialShow = props.defaultControlsVisible;
   let playbackInstance: Video | null = null;
   let controlsTimer: NodeJS.Timeout | null = null;
@@ -82,6 +86,26 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     ShowControlModal.Hidden
   );
   const [isPanning, setIsPanning] = useState(false);
+  const [danmuData, setDanmuData] = useState<DanmuType[]>([]);
+  const danmukuRef = useRef<DanmakuRef>(null);
+
+  useEffect(() => {
+    if (!cid || cid === -1) return;
+    fetchDanmuXml(cid).then((value) => {
+      const danmuList = parseDanmuToJSON(value);
+      console.log(`fetched ${danmuList.length} danmu`);
+      const sortedList = danmuList
+        .slice(0, danmuList.length > 500 ? 500 : -1)
+        .sort((a, b) => a.startTime - b.startTime)
+        .map((item) => {
+          return {
+            ...item,
+            startTime: item.startTime * 1000,
+          };
+        });
+      setDanmuData(sortedList);
+    });
+  }, [cid]);
 
   // const handleClickButton = () => {};
   const navigation = useNavigation<any>();
@@ -110,6 +134,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (!danmukuRef.current) return;
+    if (playbackInstanceInfo.state === PlaybackStates.Playing) {
+      danmukuRef.current.play();
+    } else if(playbackInstanceInfo.state === PlaybackStates.Paused) {
+      danmukuRef.current.pause();
+    }
+  }, [playbackInstanceInfo.state, danmukuRef.current]);
 
   useEffect(() => {
     if (playbackInstanceInfo.state === PlaybackStates.Playing) {
@@ -627,11 +660,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
           },
         ]}
       >
-        <Danmu />
+        {!(
+          playbackInstanceInfo.state === PlaybackStates.Loading ||
+          playbackInstanceInfo.state === PlaybackStates.Error
+        ) && <Danmu data={danmuData} ref={danmukuRef} />}
       </View>
     </View>
   );
-};
+});
 
 export default VideoPlayer;
 
