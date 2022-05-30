@@ -7,6 +7,9 @@ import {
   FlatList,
   Pressable,
   TouchableWithoutFeedback,
+  Platform,
+  UIManager,
+  LayoutAnimation,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { fetchRelatedVideos, fetchVideoInfo } from "../../api";
@@ -20,6 +23,12 @@ import { CardProps, HorizontalCard } from "../../components/card";
 
 export type PlayingInfoType = Partial<VideoInfo>;
 
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 // const transition = (
 //   <Transition.Together>
 //     <Transition.In type="fade" durationMs={200}/>
@@ -105,6 +114,7 @@ const PlayingInfo = ({
 
   const handleToggleCollapse = () => {
     // infoRef.current?.animateNextTransition();
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setCollapsed(status => !status);
   }
   const renderInfo = () => (

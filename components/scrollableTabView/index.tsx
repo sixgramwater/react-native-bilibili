@@ -334,7 +334,8 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     justifyContent: "center",
     alignContent: "center",
-    paddingHorizontal: 8,
+    marginHorizontal: 8,
+    // paddingHorizontal: 8,
   },
   tabItemText: {},
   tabIndicator: {

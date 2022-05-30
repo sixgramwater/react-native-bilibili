@@ -16,6 +16,7 @@ import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
+import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -55,7 +56,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator
-      // screenOptions={}
+    // screenOptions={}
     >
       <Stack.Screen
         name="Root"
@@ -76,6 +77,18 @@ function RootNavigator() {
         name="Search"
         component={SearchScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Follow"
+        component={FollowScreen}
+        options={({ route }) => ({
+          headerStyle: { backgroundColor: Colors.light.tint },
+          headerTintColor: "#fff",
+          title: route.params.isMe ? "我的好友" : "Ta的好友",
+          // headerBackImageSource={},
+          headerTitleStyle: { color: "#fff", fontSize: 16 },
+          // headerBackTitleStyle: { color: '#fff' }
+        })}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
@@ -147,7 +160,7 @@ function BottomTabNavigator() {
         options={{
           title: "我的",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-          headerShown: false
+          headerShown: false,
         }}
       />
     </BottomTab.Navigator>

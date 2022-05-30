@@ -22,6 +22,7 @@ import {
 } from "../../utils";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import * as Brightness from "expo-brightness";
@@ -70,7 +71,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
   const { src, cid } = props;
   let initialShow = props.defaultControlsVisible;
   let playbackInstance: Video | null = null;
-  let controlsTimer: NodeJS.Timeout | null = null;
+  // let controlsTimer: NodeJS.Timeout | null = null;
   let fetchTimer: NodeJS.Timeout | null = null;
   const video = React.useRef<Video>(null);
   const [status, setStatus] = React.useState<any>({});
@@ -88,7 +89,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
   const [isPanning, setIsPanning] = useState(false);
   const [danmuData, setDanmuData] = useState<DanmuType[]>([]);
   const danmukuRef = useRef<DanmakuRef>(null);
-
+  const controlsTimer = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (!cid || cid === -1) return;
     fetchDanmuXml(cid).then((value) => {
@@ -135,14 +136,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (!danmukuRef.current) return;
-    if (playbackInstanceInfo.state === PlaybackStates.Playing) {
-      danmukuRef.current.play();
-    } else if(playbackInstanceInfo.state === PlaybackStates.Paused) {
-      danmukuRef.current.pause();
-    }
-  }, [playbackInstanceInfo.state, danmukuRef.current]);
+  // useEffect(() => {
+  //   if (!danmukuRef.current) return;
+  //   if (playbackInstanceInfo.state === PlaybackStates.Playing) {
+  //     danmukuRef.current.play();
+  //   } else if(playbackInstanceInfo.state === PlaybackStates.Paused) {
+  //     danmukuRef.current.pause();
+  //   }
+  // }, [playbackInstanceInfo.state, danmukuRef.current]);
 
   useEffect(() => {
     if (playbackInstanceInfo.state === PlaybackStates.Playing) {
@@ -156,14 +157,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
   const animationToggle = (open: boolean = false) => {
     if (controlsState === ControlStates.Hidden || open === true) {
       setControlsState(ControlStates.Visible);
-      if (controlsTimer === null) {
-        controlsTimer = setTimeout(() => {
+      if (controlsTimer.current === null) {
+        controlsTimer.current = setTimeout(() => {
           console.log("close");
           setControlsState(ControlStates.Hidden);
         }, 5000);
       } else {
-        clearTimeout(controlsTimer);
-        controlsTimer = setTimeout(() => {
+        clearTimeout(controlsTimer.current);
+        controlsTimer.current = setTimeout(() => {
           console.log("close");
           setControlsState(ControlStates.Hidden);
         }, 5000);
@@ -171,8 +172,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
     } else if (controlsState === ControlStates.Visible) {
       // hideAnimation()
       setControlsState(ControlStates.Hidden);
-      if (controlsTimer) {
-        clearTimeout(controlsTimer);
+      if (controlsTimer.current) {
+        clearTimeout(controlsTimer.current);
       }
     }
     // if (controlsTimer === null) {
@@ -263,6 +264,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
           positionMillis: panProgress,
           shouldPlay: true,
         });
+        danmukuRef.current?.seek(panProgress);
       }
       setPlaybackInstanceInfo({
         ...playbackInstanceInfo,
@@ -288,6 +290,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
             ? PlaybackStates.Paused
             : PlaybackStates.Playing,
       });
+      if(playbackInstanceInfo.state === PlaybackStates.Playing) {
+        danmukuRef.current?.pause();
+      } else if(playbackInstanceInfo.state === PlaybackStates.Paused) {
+        danmukuRef.current?.play();
+      } else if(playbackInstanceInfo.state === PlaybackStates.Ended) {
+        danmukuRef.current?.stop();
+      }
       // if (shouldPlay) {
       //   animationToggle(true);
       // }
@@ -447,7 +456,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
           playbackInstanceInfo.state === PlaybackStates.Playing &&
           controlsState === ControlStates.Hidden
         ) && (
-          <View style={styles.header}>
+          <LinearGradient 
+          colors={['rgba(0,0,0,0.38)', 'transparent']}
+          style={styles.header}>
             <Pressable
               android_ripple={{
                 radius: 14,
@@ -488,7 +499,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
               </Pressable>
             </View>
             {/* <Text>123</Text> */}
-          </View>
+          </LinearGradient>
         )}
 
         <GestureDetector
@@ -547,7 +558,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
         </GestureDetector>
 
         {controlsState === ControlStates.Visible ? (
-          <View style={styles.footContainer}>
+          <LinearGradient colors={['transparent', 'rgba(0,0,0,0.38)', ]} style={styles.footContainer}>
             {/* <ImageBackground source={{uri: backgroundLinearImage}} resizeMode={'stretch'} style={{
               // width: WIDTH,
               // height: 36,
@@ -589,11 +600,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
                     positionMillis: position,
                     shouldPlay: true,
                   });
+                  danmukuRef.current?.seek(position);
                 }
                 setPlaybackInstanceInfo({
                   ...playbackInstanceInfo,
                   position,
                 });
+                setPanProgress(position);
               }}
             />
             <Text
@@ -621,7 +634,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
               </View>
             </Pressable>
             {/* </ImageBackground> */}
-          </View>
+          </LinearGradient>
         ) : (
           // playbackInstanceInfo.state !== PlaybackStates.Loading &&
           <View style={styles.footProgress}>
@@ -663,7 +676,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
         {!(
           playbackInstanceInfo.state === PlaybackStates.Loading ||
           playbackInstanceInfo.state === PlaybackStates.Error
-        ) && <Danmu data={danmuData} ref={danmukuRef} />}
+        ) && <Danmu data={danmuData} ref={danmukuRef} shouldPlay={playbackInstanceInfo.state === PlaybackStates.Playing }/>}
       </View>
     </View>
   );

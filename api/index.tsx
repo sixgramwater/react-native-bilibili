@@ -113,3 +113,20 @@ export const fetchDanmuXml = (cid: number) =>
   axios
     .get(`http://124.221.204.216:5000/danmuXml/${cid}`)
     .then((value) => value.data);
+
+export const fetchFollowing = (
+  mid: number,
+  ps: number,
+  pn: number,
+  orderType?: "" | "attention"
+) =>
+  inst
+    .get("http://api.bilibili.com/x/relation/followings", {
+      params: {
+        vmid: mid,
+        ps,
+        pn,
+        orderType: orderType ?? "",
+      },
+    })
+    .then((value) => value.data);

@@ -36,9 +36,8 @@ import { useInterval } from "../../hooks/useInterval";
 // import {  }
 
 export interface DanmuProps {
-  cid?: number;
-  isPlaying?: boolean;
-  seekTime?: number;
+  shouldPlay?: boolean;
+  // seekTime?: number;
   data: DanmuType[];
 }
 
@@ -254,6 +253,8 @@ const DanmuItem = React.memo(
           style={{
             fontSize: size,
             color: color,
+            textShadowRadius: 2,
+            textShadowColor: `rgba(0,0,0,1)`,
           }}
           ref={ref}
           // ref={textRef}
@@ -298,7 +299,7 @@ export interface DanmakuRef {
 
 const Danmu = React.memo(
   forwardRef<DanmakuRef, DanmuProps>((props, ref) => {
-    const { cid, data } = props;
+    const { shouldPlay, data } = props;
     useImperativeHandle(ref, () => ({
       play,
       pause,
@@ -320,21 +321,23 @@ const Danmu = React.memo(
       if (!isPlaying) {
         stopTime.current = Number(Date.now());
       }
+      curIndex.current = data.findIndex((item) => item.startTime >= time);
     };
 
     const send = (data: Partial<DanmuType>, time?: number) => {
       handleAddDanmu();
     };
 
-    const stop = () => {};
+    const stop = () => {
+      seek(0);
+    };
     // const offset = useRef(new Animated.Value(WIDTH)).current;
     // const animatationRef = useRef<Animated.CompositeAnimation>();
     // const ref = useRef<View>(null);
     const containerRef = useRef<View>(null);
     // const initialDateRef = useRef<number>();
     // const [duration, setDuration] = useState(5000);
-    const [danmuList, setDanmuList] =
-      useState<Partial<DanmuItemType>[]>([]);
+    const [danmuList, setDanmuList] = useState<Partial<DanmuItemType>[]>([]);
     const danmuRef = useRef<any>([]);
     const [isPlaying, setIsPlaying] = useState(false);
     // const lastTrackRef = useRef<number>();
@@ -358,6 +361,13 @@ const Danmu = React.memo(
       // timeRef.current = Number(Date.now());
     }, [isPlaying]);
 
+    useEffect(() => {
+      if (shouldPlay) {
+        setIsPlaying(true);
+      } else {
+        setIsPlaying(false);
+      }
+    }, [shouldPlay]);
     // useEffect(() => {
     //   passedTime.current = seekTime;
     //   startTime.current = Number(Date.now()) - seekTime;
@@ -392,7 +402,7 @@ const Danmu = React.memo(
       () => {
         loop();
       },
-      isPlaying ? 500 : null
+      isPlaying && shouldPlay ? 500 : null
     );
     // const textLen
 

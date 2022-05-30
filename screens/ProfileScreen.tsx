@@ -5,6 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import Colors from "../constants/Colors";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import tw from "twrnc";
+import { useNavigation } from "@react-navigation/native";
+import { fetchUserNav } from "../api";
 
 const FunctionItem = ({
   name,
@@ -42,24 +44,37 @@ const ListItem = ({
 }) => {
   return (
     <Pressable style={styles.listItemContainer}>
-      <View style={{alignItems: 'center', justifyContent: 'center', marginLeft: 8, marginRight: 8}}>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginLeft: 8,
+          marginRight: 8,
+        }}
+      >
         {typeof icon === "string" ? (
-          <AntDesign  name={icon} color={color} size={24} />
+          <AntDesign name={icon} color={color} size={24} />
         ) : (
           icon
         )}
       </View>
-      <Text style={[tw`text-gray-600`, { fontSize: 12 }]}>
-        {name}
-      </Text>
-      <View style={{marginLeft:'auto', alignItems: 'center'}}>
-        <AntDesign name="right" style={tw`text-gray-400`} size={16}/>
+      <Text style={[tw`text-gray-600`, { fontSize: 12 }]}>{name}</Text>
+      <View style={{ marginLeft: "auto", alignItems: "center" }}>
+        <AntDesign name="right" style={tw`text-gray-400`} size={16} />
       </View>
     </Pressable>
   );
 };
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
+  const handlePressFollow = () => {
+    const mid = 32383748;
+    navigation.navigate("Follow", { mid, isMe: true });
+    // fetchUserNav().then((res) => {
+    //   console.log(res);
+    // });
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar backgroundColor={Colors.light.tint} />
@@ -111,7 +126,7 @@ const ProfileScreen = () => {
             <Text style={{ color: "#ffffff9d", fontSize: 13 }}>动态</Text>
           </Pressable>
           <View style={styles.seperator}></View>
-          <Pressable style={styles.infoItem}>
+          <Pressable style={styles.infoItem} onPress={handlePressFollow}>
             <Text style={{ color: "#fff", fontSize: 14 }}>10</Text>
             <Text style={{ color: "#ffffff9d", fontSize: 13 }}>关注</Text>
           </Pressable>
@@ -194,10 +209,14 @@ const ProfileScreen = () => {
           更多服务
         </Text>
         <View style={styles.listContainer}>
-          <ListItem name="联系客服" icon='customerservice' color={Colors.light.tint}/>
-          <ListItem name="商城" icon='shoppingcart' color={Colors.light.tint}/>
-          <ListItem name="青少年模式" icon='smileo' color={Colors.light.tint}/>
-          <ListItem name="设置" icon='setting' color={Colors.light.tint}/>
+          <ListItem
+            name="联系客服"
+            icon="customerservice"
+            color={Colors.light.tint}
+          />
+          <ListItem name="商城" icon="shoppingcart" color={Colors.light.tint} />
+          <ListItem name="青少年模式" icon="smileo" color={Colors.light.tint} />
+          <ListItem name="设置" icon="setting" color={Colors.light.tint} />
           {/* <ListItem name="联系客服" icon='customerservice' color={Colors.light.tint}/> */}
         </View>
       </View>
@@ -266,15 +285,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
-  listContainer: {
-
-  },
+  listContainer: {},
   listItemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 12,
     // borderBottomColor: '#f4f5f4',
     // borderBottomWidth: 1,
-  }
+  },
 });
