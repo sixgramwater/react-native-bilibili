@@ -19,6 +19,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Playing: PlayingParamList | undefined;
   Search: undefined;
+  Follow: {mid: number, isMe: boolean}
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

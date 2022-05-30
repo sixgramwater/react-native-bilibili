@@ -1,5 +1,5 @@
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
@@ -7,8 +7,10 @@ import { StatusBar } from "expo-status-bar";
 import ScrollableTabs from "../components/scrollableTabView";
 import PlayingInfo from "../feature/playing/PlayingInfo";
 import VideoPlayer from "../components/videoPlayer";
-import { fetchVideoUrl, fetchVideoUrlNoReferer } from "../api";
+import { fetchDanmuXml, fetchVideoUrl, fetchVideoUrlNoReferer } from "../api";
 import ReplyInfo from "../feature/reply/replyInfo";
+import axios from "axios";
+import DanmuSwitch from "../components/videoPlayer/danmuSwitch";
 
 const WIDTH = Dimensions.get("screen").width;
 
@@ -17,6 +19,8 @@ const PlayingScreen = () => {
   const { avid, cid: initCid } = useRoute<any>().params;
   const [cid, setCid] = useState(initCid);
   const [url, setUrl] = useState<string | undefined>();
+  const [danmuOpen, setDanmuOpen] = useState(false);
+  // const provider = useRef();
   const handleSetCid = (cid: number) => {
     setCid(cid);
   };
@@ -26,7 +30,7 @@ const PlayingScreen = () => {
     if (cid === -1) return;
     return fetchVideoUrlNoReferer(avid, cid)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const urlList = res.data.durl;
         // console.log(res);
         // console.log(urlList[0].url, urlList[0].backup_url);
@@ -37,10 +41,51 @@ const PlayingScreen = () => {
         console.error(err);
       });
   };
+
+  const fetchDanmuData = () => {
+    if (cid === -1) return;
+    fetchDanmuXml(cid)
+      .then((data) => {
+        console.log(data);
+      })
+      .then((err) => {
+        console.log(err);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // axios.get('https://gist.githubusercontent.com/Pavneet-Sing/d0f3324f2cd3244a6ac8ffc5e8550102/raw/8ebc801b3e4d4987590958978ae58d3f931193a3/XMLResponse.xml')
+    // .then(value => {
+    //   console.log(value);
+    // })
+    // return axios.get(`http://api.bilibili.com/x/v1/dm/list.so`, {
+    //   // responseType: 'text',
+    //   responseEncoding: 'UTF-8',
+    //   params: {
+    //     oid: cid
+    //   }
+    //   // decompress: true,
+    //   // responseType: 'text',
+    // }).then(data => {
+    //   // data.
+    //   console.log(data.data);
+    // }).catch(err => {
+    //   console.log(err);
+    // })
+    // provider.c = new CommentProvider();
+    // provider.addStaticSource();
+  };
+
   useEffect(() => {
     // console.log(avid, cid);
     fetchVideo();
+    // fetchDanmuData();
   }, [avid, cid]);
+
+  const handleToggleDanmu = useCallback(() => {
+    setDanmuOpen((danmuOpen) => !danmuOpen);
+  }, []);
+
   const tabs = [
     {
       id: 0,
@@ -61,7 +106,7 @@ const PlayingScreen = () => {
       <StatusBar backgroundColor="#000" />
       <View style={{ flex: 1 }}>
         <View style={styles.videoContainer}>
-          <VideoPlayer src={url} />
+          <VideoPlayer src={url} cid={cid} />
         </View>
         {/* <View style={styles.header}>
           <Pressable
@@ -105,7 +150,12 @@ const PlayingScreen = () => {
           </View>
         </View> */}
         <View style={styles.infoContainer}>
-          <ScrollableTabs tabs={tabs} />
+          <ScrollableTabs
+            tabs={tabs}
+            renderRight={
+              <DanmuSwitch open={danmuOpen} onToggle={handleToggleDanmu} />
+            }
+          />
           {/* <Text>PlayingScreen</Text>
           <Text>{avid + ", " + cid}</Text> */}
         </View>
@@ -122,7 +172,7 @@ const styles = StyleSheet.create({
     height: (WIDTH * 9) / 16,
     backgroundColor: "#000",
   },
-  
+
   infoContainer: {
     flex: 1,
   },

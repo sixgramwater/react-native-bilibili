@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { AntDesign, createMu, Feather, FontAwesome5 } from "@expo/vector-icons";
 import navigation from "../../navigation";
@@ -18,12 +18,16 @@ import Colors from "../../constants/Colors";
 import {
   backgroundLinearImage,
   getMinutesSecondsFromMilliseconds,
+  parseDanmuToJSON,
 } from "../../utils";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import * as Brightness from "expo-brightness";
+import Danmu, { DanmakuRef, DanmuType } from "../danmu";
+import { fetchDanmuXml } from "../../api";
 
 export enum ControlStates {
   Visible = "Visible",
@@ -60,12 +64,14 @@ export type ErrorType = {
 export interface VideoPlayerProps {
   src?: string;
   defaultControlsVisible?: boolean;
+  cid?: number;
+  showDanmu?: boolean;
 }
-const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
-  const { src } = props;
+const VideoPlayer: React.FC<VideoPlayerProps> = React.memo((props) => {
+  const { src, cid } = props;
   let initialShow = props.defaultControlsVisible;
   let playbackInstance: Video | null = null;
-  let controlsTimer: NodeJS.Timeout | null = null;
+  // let controlsTimer: NodeJS.Timeout | null = null;
   let fetchTimer: NodeJS.Timeout | null = null;
   const video = React.useRef<Video>(null);
   const [status, setStatus] = React.useState<any>({});
@@ -81,6 +87,26 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     ShowControlModal.Hidden
   );
   const [isPanning, setIsPanning] = useState(false);
+  const [danmuData, setDanmuData] = useState<DanmuType[]>([]);
+  const danmukuRef = useRef<DanmakuRef>(null);
+  const controlsTimer = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    if (!cid || cid === -1) return;
+    fetchDanmuXml(cid).then((value) => {
+      const danmuList = parseDanmuToJSON(value);
+      console.log(`fetched ${danmuList.length} danmu`);
+      const sortedList = danmuList
+        .slice(0, danmuList.length > 500 ? 500 : -1)
+        .sort((a, b) => a.startTime - b.startTime)
+        .map((item) => {
+          return {
+            ...item,
+            startTime: item.startTime * 1000,
+          };
+        });
+      setDanmuData(sortedList);
+    });
+  }, [cid]);
 
   // const handleClickButton = () => {};
   const navigation = useNavigation<any>();
@@ -110,6 +136,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     })();
   }, []);
 
+  // useEffect(() => {
+  //   if (!danmukuRef.current) return;
+  //   if (playbackInstanceInfo.state === PlaybackStates.Playing) {
+  //     danmukuRef.current.play();
+  //   } else if(playbackInstanceInfo.state === PlaybackStates.Paused) {
+  //     danmukuRef.current.pause();
+  //   }
+  // }, [playbackInstanceInfo.state, danmukuRef.current]);
+
   useEffect(() => {
     if (playbackInstanceInfo.state === PlaybackStates.Playing) {
       fetchTimer = setInterval(fetchStatusAndUpdate, 1000);
@@ -122,14 +157,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   const animationToggle = (open: boolean = false) => {
     if (controlsState === ControlStates.Hidden || open === true) {
       setControlsState(ControlStates.Visible);
-      if (controlsTimer === null) {
-        controlsTimer = setTimeout(() => {
+      if (controlsTimer.current === null) {
+        controlsTimer.current = setTimeout(() => {
           console.log("close");
           setControlsState(ControlStates.Hidden);
         }, 5000);
       } else {
-        clearTimeout(controlsTimer);
-        controlsTimer = setTimeout(() => {
+        clearTimeout(controlsTimer.current);
+        controlsTimer.current = setTimeout(() => {
           console.log("close");
           setControlsState(ControlStates.Hidden);
         }, 5000);
@@ -137,8 +172,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     } else if (controlsState === ControlStates.Visible) {
       // hideAnimation()
       setControlsState(ControlStates.Hidden);
-      if (controlsTimer) {
-        clearTimeout(controlsTimer);
+      if (controlsTimer.current) {
+        clearTimeout(controlsTimer.current);
       }
     }
     // if (controlsTimer === null) {
@@ -229,6 +264,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
           positionMillis: panProgress,
           shouldPlay: true,
         });
+        danmukuRef.current?.seek(panProgress);
       }
       setPlaybackInstanceInfo({
         ...playbackInstanceInfo,
@@ -254,6 +290,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
             ? PlaybackStates.Paused
             : PlaybackStates.Playing,
       });
+      if(playbackInstanceInfo.state === PlaybackStates.Playing) {
+        danmukuRef.current?.pause();
+      } else if(playbackInstanceInfo.state === PlaybackStates.Paused) {
+        danmukuRef.current?.play();
+      } else if(playbackInstanceInfo.state === PlaybackStates.Ended) {
+        danmukuRef.current?.stop();
+      }
       // if (shouldPlay) {
       //   animationToggle(true);
       // }
@@ -309,46 +352,46 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
         </View>
       );
     if (showControlModal === ShowControlModal.Volume)
-    return (
-      <View
-        style={[
-          styles.modal,
-          {
-            width: "33%",
-          },
-        ]}
-      >
-        {/* <View> */}
-        <MaterialCommunityIcons
-          name={volume === 0 ? "volume-mute" : "volume-high"}
-          color="#fff"
-          size={18}
-          style={{ marginRight: 12 }}
-        />
-        {/* </View> */}
+      return (
         <View
-          style={{
-            position: "relative",
-            height: 2,
-            backgroundColor: "hsla(0,0%,100%,.2)",
-            flex: 1,
-          }}
+          style={[
+            styles.modal,
+            {
+              width: "33%",
+            },
+          ]}
         >
+          {/* <View> */}
+          <MaterialCommunityIcons
+            name={volume === 0 ? "volume-mute" : "volume-high"}
+            color="#fff"
+            size={18}
+            style={{ marginRight: 12 }}
+          />
+          {/* </View> */}
           <View
             style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              top: 0,
-              backgroundColor: Colors.light.tint,
-              width: volume * 100 + "%",
-              height: "100%",
+              position: "relative",
+              height: 2,
+              backgroundColor: "hsla(0,0%,100%,.2)",
+              flex: 1,
             }}
-          ></View>
+          >
+            <View
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+                backgroundColor: Colors.light.tint,
+                width: volume * 100 + "%",
+                height: "100%",
+              }}
+            ></View>
+          </View>
         </View>
-      </View>
-    );
+      );
     if (showControlModal === ShowControlModal.Light)
       return (
         <View
@@ -413,7 +456,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
           playbackInstanceInfo.state === PlaybackStates.Playing &&
           controlsState === ControlStates.Hidden
         ) && (
-          <View style={styles.header}>
+          <LinearGradient 
+          colors={['rgba(0,0,0,0.38)', 'transparent']}
+          style={styles.header}>
             <Pressable
               android_ripple={{
                 radius: 14,
@@ -454,7 +499,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
               </Pressable>
             </View>
             {/* <Text>123</Text> */}
-          </View>
+          </LinearGradient>
         )}
 
         <GestureDetector
@@ -513,7 +558,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
         </GestureDetector>
 
         {controlsState === ControlStates.Visible ? (
-          <View style={styles.footContainer}>
+          <LinearGradient colors={['transparent', 'rgba(0,0,0,0.38)', ]} style={styles.footContainer}>
             {/* <ImageBackground source={{uri: backgroundLinearImage}} resizeMode={'stretch'} style={{
               // width: WIDTH,
               // height: 36,
@@ -555,11 +600,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
                     positionMillis: position,
                     shouldPlay: true,
                   });
+                  danmukuRef.current?.seek(position);
                 }
                 setPlaybackInstanceInfo({
                   ...playbackInstanceInfo,
                   position,
                 });
+                setPanProgress(position);
               }}
             />
             <Text
@@ -587,7 +634,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
               </View>
             </Pressable>
             {/* </ImageBackground> */}
-          </View>
+          </LinearGradient>
         ) : (
           // playbackInstanceInfo.state !== PlaybackStates.Loading &&
           <View style={styles.footProgress}>
@@ -618,9 +665,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
           }
         /> */}
       </View>
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            // zIndex: 1000,
+          },
+        ]}
+      >
+        {!(
+          playbackInstanceInfo.state === PlaybackStates.Loading ||
+          playbackInstanceInfo.state === PlaybackStates.Error
+        ) && <Danmu data={danmuData} ref={danmukuRef} shouldPlay={playbackInstanceInfo.state === PlaybackStates.Playing }/>}
+      </View>
     </View>
   );
-};
+});
 
 export default VideoPlayer;
 
@@ -639,6 +699,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     left: 0,
+    zIndex: 9999,
   },
   header: {
     paddingHorizontal: 12,

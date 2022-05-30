@@ -5,8 +5,13 @@ import {
   View,
   Image,
   FlatList,
+  Pressable,
+  TouchableWithoutFeedback,
+  Platform,
+  UIManager,
+  LayoutAnimation,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { fetchRelatedVideos, fetchVideoInfo } from "../../api";
 import { RecommendVideoInfo, VideoInfo } from "./type";
 import { Feather } from "@expo/vector-icons";
@@ -14,8 +19,23 @@ import tw from "twrnc";
 import Colors from "../../constants/Colors";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { CardProps, HorizontalCard } from "../../components/card";
+// import { Transition, Transitioning, TransitioningView } from "react-native-reanimated";
 
 export type PlayingInfoType = Partial<VideoInfo>;
+
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+// const transition = (
+//   <Transition.Together>
+//     <Transition.In type="fade" durationMs={200}/>
+//     <Transition.Change />
+//     <Transition.Out type="fade" durationMs={200}/>
+//   </Transition.Together>
+// )
 
 export const formatNum = (num?: number) => {
   if (num === undefined) return "";
@@ -34,8 +54,15 @@ export const formatDate = (date?: number) => {
   return dateString.substring(0, 10) + " " + dateString.substring(11, 16);
 };
 
-const PlayingInfo = ({ aid, onLoadCid }: { aid: number, onLoadCid?: (cid: number) => void }) => {
+const PlayingInfo = ({
+  aid,
+  onLoadCid,
+}: {
+  aid: number;
+  onLoadCid?: (cid: number) => void;
+}) => {
   const [info, setInfo] = useState<PlayingInfoType>();
+  // const infoRef = useRef<TransitioningView>(null);
   const [relatedList, setRelatedList] = useState<RecommendVideoInfo[]>([]);
   const mappedCardList: CardProps[] = !relatedList
     ? []
@@ -85,6 +112,11 @@ const PlayingInfo = ({ aid, onLoadCid }: { aid: number, onLoadCid?: (cid: number
     fetchRelatedList();
   }, [aid]);
 
+  const handleToggleCollapse = () => {
+    // infoRef.current?.animateNextTransition();
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setCollapsed(status => !status);
+  }
   const renderInfo = () => (
     <View style={styles.info}>
       <View style={styles.infoHeader}>
@@ -109,11 +141,23 @@ const PlayingInfo = ({ aid, onLoadCid }: { aid: number, onLoadCid?: (cid: number
       </View>
       <View style={styles.infoContent}>
         <View style={styles.title}>
-          <Text style={styles.titleText} numberOfLines={collapsed ? 1 : 3}>
-            {info?.title}
-          </Text>
+          <TouchableWithoutFeedback
+            onPress={handleToggleCollapse}
+          >
+            <Text style={styles.titleText} numberOfLines={collapsed ? 1 : 3}>
+              {info?.title}
+            </Text>
+          </TouchableWithoutFeedback>
           <View style={styles.arrowBtn}>
-            <Feather name="chevron-down" size={20} color={"#9CA3AF"} />
+            <TouchableWithoutFeedback
+              onPress={handleToggleCollapse}
+            >
+              <Feather
+                name={collapsed ? "chevron-up" : "chevron-down"}
+                size={20}
+                color={"#95989d"}
+              />
+            </TouchableWithoutFeedback>
           </View>
         </View>
         <View style={styles.littleDetail}>
@@ -135,7 +179,14 @@ const PlayingInfo = ({ aid, onLoadCid }: { aid: number, onLoadCid?: (cid: number
             </Text>
           </View>
         </View>
-        <View style={styles.title}></View>
+        {!collapsed && (
+          <View style={styles.expandInfoContainer}>
+            <Text style={{ fontSize: 12, color: "#95989d", marginBottom: 6 }}>
+              {info?.bvid}
+            </Text>
+            <Text style={{ fontSize: 12, color: "#95989d" }}>{info?.desc}</Text>
+          </View>
+        )}
       </View>
       <View style={styles.infoBtns}>
         <View style={styles.infoBtn}>
@@ -330,6 +381,7 @@ const styles = StyleSheet.create({
   },
   arrowBtn: {
     marginLeft: "auto",
+    alignSelf: "flex-start",
   },
   titleText: {
     flex: 1,
@@ -346,12 +398,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   detailItemIcon: {
-    color: "#9CA3AF",
+    color: "#95989d",
     marginRight: 3,
   },
   detailItemText: {
     fontSize: 11,
-    color: "#9CA3AF",
+    color: "#95989d",
+  },
+  expandInfoContainer: {
+    paddingVertical: 6,
+    // paddingVertical: 8,
+    flexGrow: 1,
   },
   infoBtns: {
     flexDirection: "row",

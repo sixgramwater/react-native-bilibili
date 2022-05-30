@@ -16,6 +16,7 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -121,6 +122,7 @@ export interface ScrollableTabsProps {
   indicatorStyle?: ViewStyle;
   tabTextStyle?: TextStyle;
   tabTextActivatedStyle?: TextStyle;
+  renderRight?: React.ReactNode;
 }
 const ScrollableTabs: React.FC<ScrollableTabsProps> = (props) => {
   const {
@@ -130,6 +132,7 @@ const ScrollableTabs: React.FC<ScrollableTabsProps> = (props) => {
     indicatorStyle,
     tabTextStyle,
     tabTextActivatedStyle,
+    renderRight,
   } = props;
   let tabs = tabsProp
     ? tabsProp.map((item) => {
@@ -204,6 +207,39 @@ const ScrollableTabs: React.FC<ScrollableTabsProps> = (props) => {
     pagerRef.current?.setPage(id);
     // requestAnimationFrame(() => pagerRef.current?.setPage(id));
   };
+
+  const memorizedPageView = useMemo(() => {
+    return (
+      <PagerView
+        style={{ flex: 1 }}
+        onPageScroll={handleScroll}
+        ref={pagerRef}
+        onPageSelected={(e) => setActiveTabIndex(e.nativeEvent.position)}
+      >
+        {tabs.map((tab) => {
+          if (tab.component) {
+            // const Comp = tab.component;
+            // Comp.key = tab.id;
+            return (
+              <View style={{ width: WIDTH }} key={tab.id}>
+                {/* {tab.component} */}
+                {/* <Text>12314</Text> */}
+                {tab.component}
+              </View>
+            );
+          }
+          return (
+            <View style={{ width: WIDTH, padding: 12 }} key={tab.id}>
+              <Text style={tw`text-gray-500`}>{tab.name}</Text>
+            </View>
+          );
+        })}
+        {/* // <View style={styles.scrollView}> */}
+        {/* <Text>ScrollableTabs</Text> */}
+        {/* // </View> */}
+      </PagerView>
+    );
+  }, []);
   return (
     // <ScrollView
     //   horizontal={true}
@@ -259,35 +295,13 @@ const ScrollableTabs: React.FC<ScrollableTabsProps> = (props) => {
             indicatorStyle,
           ]}
         ></Animated.View>
+        {renderRight && (
+          <View style={{ marginLeft: "auto" }}>{renderRight}</View>
+        )}
       </View>
-      <PagerView
-        style={{ flex: 1 }}
-        onPageScroll={handleScroll}
-        ref={pagerRef}
-        onPageSelected={(e) => setActiveTabIndex(e.nativeEvent.position)}
-      >
-        {tabs.map((tab) => {
-          if (tab.component) {
-            // const Comp = tab.component;
-            // Comp.key = tab.id;
-            return (
-              <View style={{ width: WIDTH }} key={tab.id}>
-                {/* {tab.component} */}
-                {/* <Text>12314</Text> */}
-                {tab.component}
-              </View>
-            );
-          }
-          return (
-            <View style={{ width: WIDTH, padding: 12 }} key={tab.id}>
-              <Text style={tw`text-gray-500`}>{tab.name}</Text>
-            </View>
-          );
-        })}
-        {/* // <View style={styles.scrollView}> */}
-        {/* <Text>ScrollableTabs</Text> */}
-        {/* // </View> */}
-      </PagerView>
+      {
+        memorizedPageView
+      }
     </View>
   );
 };
@@ -320,7 +334,8 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     justifyContent: "center",
     alignContent: "center",
-    paddingHorizontal: 8,
+    marginHorizontal: 8,
+    // paddingHorizontal: 8,
   },
   tabItemText: {},
   tabIndicator: {
