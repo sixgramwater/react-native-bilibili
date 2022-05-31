@@ -1,6 +1,14 @@
 import inst from "./axios";
 import axios from "axios";
 import qs from "qs";
+import {
+  AVDynamicItemProps,
+  DrawDynamicItemProps,
+  DynamicItemProps,
+  DYNAMIC_TYPE,
+  LiveDynamicItemProps,
+  WordDynamicItemProps,
+} from "../feature/dynamic/dynamicItem";
 
 export const fetchHomeRecommend = () =>
   inst
@@ -130,3 +138,94 @@ export const fetchFollowing = (
       },
     })
     .then((value) => value.data);
+
+export const fetchDynamic = () =>
+  inst
+    .get(
+      "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/all?timezone_offset=-480&type=all&page=1"
+    )
+    .then((value) => {
+      const data = value.data;
+      const dataList = data.data.items;
+      const mappedList = dataList.map((item: any) => {
+        const modules = item.modules;
+        const authorModule = modules.module_author;
+        const dynamicModule = modules.module_dynamic;
+        const statModule = modules.module_stat;
+        const type = item.type;
+
+        const dynamicItem: DynamicItemProps = {
+          type: item.type,
+          author: {
+            mid: authorModule.mid,
+            face: authorModule.face,
+            name: authorModule.name,
+            following: authorModule.following,
+            official_verify: authorModule.official_verify,
+            vip: {
+              status: authorModule.vip.status,
+              type: authorModule.vip.type,
+            },
+            pub_action: authorModule.pub_action,
+            pub_time: authorModule.pub_time,
+          },
+          stat: {
+            comment: {
+              count: statModule.comment.count,
+            },
+            forward: {
+              count: statModule.forward.count,
+            },
+            like: {
+              count: statModule.like.count,
+            },
+          },
+        };
+        if (type === DYNAMIC_TYPE.WORD) {
+          const wordItem: WordDynamicItemProps = {
+            ...dynamicItem,
+            desc: dynamicModule.desc,
+          };
+          return wordItem;
+        } else if (type === DYNAMIC_TYPE.AV) {
+          const archive = dynamicModule.major.archive;
+          const avItem: AVDynamicItemProps = {
+            ...dynamicItem,
+            aid: archive.aid,
+            bvid: archive.bvid,
+            cover: archive.cover,
+            desc: archive.desc,
+            durationText: archive.duration_text,
+            play: archive.stat.play,
+            danmaku: archive.stat.danmaku,
+            title: archive.title,
+          };
+          return avItem;
+        } else if (type === DYNAMIC_TYPE.DRAW) {
+          const items = dynamicModule.major.draw.items;
+          const drawItem: DrawDynamicItemProps = {
+            ...dynamicItem,
+            items,
+            desc: dynamicModule.desc,
+          };
+          return drawItem;
+        } else if (type === DYNAMIC_TYPE.LIVE_RCMD) {
+          const liveRecmd = JSON.parse(dynamicModule.major.live_rcmd.content).live_play_info;
+          // console.log(liveRecmd);
+          const liveItem: LiveDynamicItemProps = {
+            ...dynamicItem,
+            roomId: liveRecmd.room_id,
+            roomType: liveRecmd.room_type,
+            title: liveRecmd.title,
+            areaName: liveRecmd.area_name,
+            watched: liveRecmd.watched_show?.num,
+            watchedText: liveRecmd.watched_show?.text_large,
+            cover: liveRecmd.cover,
+          };
+          return liveItem;
+        } else {
+        }
+      });
+      // console.log(mappedList);
+      return mappedList;
+    });

@@ -1,0 +1,553 @@
+[
+  {
+    "type": "DYNAMIC_TYPE_LIVE_RCMD",
+    "author": {
+      "mid": 17174243,
+      "face": "http://i2.hdslb.com/bfs/face/0da1d54a6cfdb58ec3d982cc0e9d4fda6c953853.jpg",
+      "name": "yakisa彭雅琦",
+      "following": true,
+      "official_verify": {
+        "desc": "代表作《在一起》《雏菊》影视作品《放学别走》",
+        "type": 0
+      },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "直播了",
+      "pub_time": ""
+    },
+    "stat": {
+      "comment": { "count": 0 },
+      "forward": { "count": 0 },
+      "like": { "count": 39 }
+    },
+    "roomId": 21837739,
+    "roomType": 0,
+    "title": "宇宙级可爱",
+    "areaName": "视频唱见",
+    "watched": 5498,
+    "watchedText": "5498人看过",
+    "cover": "http://i0.hdslb.com/bfs/live/user_cover/dd0569164ca131d42336a628aba5473b9714f5f9.jpg"
+  },
+  {
+    "type": "DYNAMIC_TYPE_WORD",
+    "author": {
+      "mid": 558070433,
+      "face": "http://i2.hdslb.com/bfs/face/88b1b16b0844cbe864fc17d77864ef9007357ba2.jpg",
+      "name": "千春_Chiharu",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "16分钟前"
+    },
+    "stat": {
+      "comment": { "count": 35 },
+      "forward": { "count": 0 },
+      "like": { "count": 224 }
+    },
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "祝你睡个好觉，晚安捏肖纯娟😪😪",
+          "text": "祝你睡个好觉，晚安捏肖纯娟😪😪",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "祝你睡个好觉，晚安捏肖纯娟😪😪"
+    }
+  },
+  null,
+  {
+    "type": "DYNAMIC_TYPE_DRAW",
+    "author": {
+      "mid": 170338,
+      "face": "http://i1.hdslb.com/bfs/face/f5fe224201cb532436668e5172d960c877f56baf.jpg",
+      "name": "手冢文轩",
+      "following": true,
+      "official_verify": { "desc": "", "type": -1 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "16分钟前"
+    },
+    "stat": {
+      "comment": { "count": 0 },
+      "forward": { "count": 1 },
+      "like": { "count": 29 }
+    },
+    "items": [
+      {
+        "height": 599,
+        "size": 571.9004,
+        "src": "https://i0.hdslb.com/bfs/album/8e9fc18ef665a99efd9994c1e4d9c24edee06fce.png",
+        "tags": [],
+        "width": 1042
+      }
+    ],
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "PS4版的时候我记得可以任意设置按键，怎么这个PC版把单键设置成只能映射两个键位。原本应该是L1R1L2R2分别设置成方块三角圆圈×的，等于是三套单键，肩键专门负责HOLD。怎么现在变成了只能设置两套单键。sega你在做什么？！",
+          "text": "PS4版的时候我记得可以任意设置按键，怎么这个PC版把单键设置成只能映射两个键位。原本应该是L1R1L2R2分别设置成方块三角圆圈×的，等于是三套单键，肩键专门负责HOLD。怎么现在变成了只能设置两套单键。sega你在做什么？！",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "PS4版的时候我记得可以任意设置按键，怎么这个PC版把单键设置成只能映射两个键位。原本应该是L1R1L2R2分别设置成方块三角圆圈×的，等于是三套单键，肩键专门负责HOLD。怎么现在变成了只能设置两套单键。sega你在做什么？！"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_WORD",
+    "author": {
+      "mid": 923711,
+      "face": "http://i2.hdslb.com/bfs/face/d0db58c5e44666fce4d14826cce4bd4b7f0541e2.jpg",
+      "name": "喂狗组-楼座",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "19分钟前"
+    },
+    "stat": {
+      "comment": { "count": 4 },
+      "forward": { "count": 0 },
+      "like": { "count": 19 }
+    },
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "罗巴不能Q的bug到底什么时候才修？",
+          "text": "罗巴不能Q的bug到底什么时候才修？",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "罗巴不能Q的bug到底什么时候才修？"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_WORD",
+    "author": {
+      "mid": 690608693,
+      "face": "http://i2.hdslb.com/bfs/face/2c92c7ea0268e159d244a02b40b38d484be14de4.jpg",
+      "name": "勾檀Mayumi",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "25分钟前"
+    },
+    "stat": {
+      "comment": { "count": 35 },
+      "forward": { "count": 0 },
+      "like": { "count": 247 }
+    },
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "祝你睡个好觉，晚安捏master😪😪",
+          "text": "祝你睡个好觉，晚安捏master😪😪",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "祝你睡个好觉，晚安捏master😪😪"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_WORD",
+    "author": {
+      "mid": 558070433,
+      "face": "http://i2.hdslb.com/bfs/face/88b1b16b0844cbe864fc17d77864ef9007357ba2.jpg",
+      "name": "千春_Chiharu",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "27分钟前"
+    },
+    "stat": {
+      "comment": { "count": 30 },
+      "forward": { "count": 0 },
+      "like": { "count": 253 }
+    },
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "狠狠哼哼很恨！",
+          "text": "狠狠哼哼很恨！",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "狠狠哼哼很恨！"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_DRAW",
+    "author": {
+      "mid": 2250815,
+      "face": "http://i2.hdslb.com/bfs/face/e8af77948058029e50797fa0b82affafdbff6279.jpg",
+      "name": "UCG游戏机实用技术",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "30分钟前"
+    },
+    "stat": {
+      "comment": { "count": 4 },
+      "forward": { "count": 0 },
+      "like": { "count": 94 }
+    },
+    "items": [
+      {
+        "height": 4000,
+        "size": 14104.029,
+        "src": "https://i0.hdslb.com/bfs/album/2e9a8966b34756dc1d10834291988c4b22f1de81.jpg",
+        "tags": [],
+        "width": 6000
+      }
+    ],
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "【真·蹭吃蹭喝】美好的夜晚，收到了",
+          "text": "【真·蹭吃蹭喝】美好的夜晚，收到了",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        },
+        {
+          "orig_text": "@Pixmain",
+          "rid": "688297598",
+          "text": "@Pixmain",
+          "type": "RICH_TEXT_NODE_TYPE_AT"
+        },
+        {
+          "orig_text": " 的端午礼盒！今晚宵夜又有着落了~大家都喜欢什么味道的粽子呀 ?",
+          "text": " 的端午礼盒！今晚宵夜又有着落了~大家都喜欢什么味道的粽子呀 ?",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        },
+        {
+          "emoji": {
+            "icon_url": "http://i0.hdslb.com/bfs/emote/3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png",
+            "size": 1,
+            "text": "[doge]",
+            "type": 1
+          },
+          "orig_text": "[doge]",
+          "text": "[doge]",
+          "type": "RICH_TEXT_NODE_TYPE_EMOJI"
+        }
+      ],
+      "text": "【真·蹭吃蹭喝】美好的夜晚，收到了@Pixmain 的端午礼盒！今晚宵夜又有着落了~大家都喜欢什么味道的粽子呀 ?[doge]"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_WORD",
+    "author": {
+      "mid": 434401868,
+      "face": "http://i2.hdslb.com/bfs/face/957dc9a092be89ee1b6066508120561846ce46bd.jpg",
+      "name": "中单光一",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "1小时前"
+    },
+    "stat": {
+      "comment": { "count": 39 },
+      "forward": { "count": 2 },
+      "like": { "count": 363 }
+    },
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "今天或将播给鬼看。",
+          "text": "今天或将播给鬼看。",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "今天或将播给鬼看。"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_LIVE_RCMD",
+    "author": {
+      "mid": 48039,
+      "face": "http://i0.hdslb.com/bfs/face/dada6e2a76dad1aca162e4bd942413edfe91d284.jpg",
+      "name": "北极熊剩饭",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "直播了",
+      "pub_time": ""
+    },
+    "stat": {
+      "comment": { "count": 0 },
+      "forward": { "count": 0 },
+      "like": { "count": 57 }
+    },
+    "roomId": 12276230,
+    "roomType": 0,
+    "title": "【剩饭来啦】大机器人每日一下",
+    "areaName": "主机游戏",
+    "watched": 9531,
+    "watchedText": "9531人看过",
+    "cover": "http://i0.hdslb.com/bfs/live/new_room_cover/ccbb63053d0705bce85efc0d9cdb732c7e2aaf14.jpg"
+  },
+  null,
+  {
+    "type": "DYNAMIC_TYPE_AV",
+    "author": {
+      "mid": 4079592,
+      "face": "http://i0.hdslb.com/bfs/face/a3b09df441dc63ef5566b2d18ee3b0f63a188210.jpg",
+      "name": "机核网",
+      "following": true,
+      "official_verify": { "desc": "", "type": -1 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "投稿了视频",
+      "pub_time": "1小时前"
+    },
+    "stat": {
+      "comment": { "count": 36 },
+      "forward": { "count": 75 },
+      "like": { "count": 351 }
+    },
+    "aid": "939533841",
+    "bvid": "BV1ZW4y1k7UG",
+    "cover": "http://i0.hdslb.com/bfs/archive/cb4f88004d87122d0e2a56b3542c423f34ad39a2.jpg",
+    "desc": "今天我们要玩的是《小马宝莉：玛泰湾冒险》，目前本作已经在 Steam 发售，游戏主线则是已经来到了 G5 世代，Sunny 和一众新朋友这次要解决不少麻烦，游戏品质到底如何，大家不妨一起看看这期视频。",
+    "durationText": "30:11",
+    "play": "5099",
+    "danmaku": "25",
+    "title": "【新作试玩】成人玩得比小孩开心，《小马宝莉：玛泰湾冒险》初见"
+  },
+  {
+    "type": "DYNAMIC_TYPE_DRAW",
+    "author": {
+      "mid": 56748733,
+      "face": "http://i1.hdslb.com/bfs/face/094615e62b7375ba8ee1027f611fdc1c9b06eb42.jpg",
+      "name": "雪绘Yukie",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "1小时前"
+    },
+    "stat": {
+      "comment": { "count": 59 },
+      "forward": { "count": 2 },
+      "like": { "count": 977 }
+    },
+    "items": [
+      {
+        "height": 399,
+        "size": 4824.7334,
+        "src": "https://i0.hdslb.com/bfs/album/d8a661c6e3ab7ec956cac2d97d2fa6b082e0f8d2.gif",
+        "tags": [],
+        "width": 416
+      }
+    ],
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "双花————我真的什么都做不到！！！",
+          "text": "双花————我真的什么都做不到！！！",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "双花————我真的什么都做不到！！！"
+    }
+  },
+  null,
+  null,
+  null,
+  {
+    "type": "DYNAMIC_TYPE_AV",
+    "author": {
+      "mid": 1980584,
+      "face": "http://i2.hdslb.com/bfs/face/0cd2c39e32d1f6845f46e7230bfcb5df8eff25e4.jpg",
+      "name": "楠楠同学提不起劲",
+      "following": true,
+      "official_verify": { "desc": "", "type": -1 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "投稿了视频",
+      "pub_time": "2小时前"
+    },
+    "stat": {
+      "comment": { "count": 59 },
+      "forward": { "count": 0 },
+      "like": { "count": 247 }
+    },
+    "aid": "299514891",
+    "bvid": "BV1YF41157pq",
+    "cover": "http://i0.hdslb.com/bfs/archive/f3252eb215117beb70dd8d8e08d367ae450cd4f8.jpg",
+    "desc": "喜欢Up的视频的话，不要忘了关注，好评视频，投币呀(●'◡'●)",
+    "durationText": "21:27",
+    "play": "6109",
+    "danmaku": "71",
+    "title": "【Zard】满脸陶醉的给原神充钱，已经是米哈游的形状了。"
+  },
+  {
+    "type": "DYNAMIC_TYPE_DRAW",
+    "author": {
+      "mid": 20817739,
+      "face": "http://i1.hdslb.com/bfs/face/b0b04c3b50cf19d875ff943111935a78001e2642.jpg",
+      "name": "迷一风",
+      "following": true,
+      "official_verify": { "desc": "", "type": -1 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "2小时前"
+    },
+    "stat": {
+      "comment": { "count": 17 },
+      "forward": { "count": 1 },
+      "like": { "count": 414 }
+    },
+    "items": [
+      {
+        "height": 5000,
+        "size": 4357.9473,
+        "src": "https://i0.hdslb.com/bfs/album/3a4aee190e27394bb550fa16d7b0182b5764eee3.jpg",
+        "tags": [],
+        "width": 5000
+      }
+    ],
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "摸个号角 顺便冒个泡 证明我还活着(=・ω・=)",
+          "text": "摸个号角 顺便冒个泡 证明我还活着(=・ω・=)",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "摸个号角 顺便冒个泡 证明我还活着(=・ω・=)"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_WORD",
+    "author": {
+      "mid": 2250815,
+      "face": "http://i2.hdslb.com/bfs/face/e8af77948058029e50797fa0b82affafdbff6279.jpg",
+      "name": "UCG游戏机实用技术",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "",
+      "pub_time": "2小时前"
+    },
+    "stat": {
+      "comment": { "count": 11 },
+      "forward": { "count": 0 },
+      "like": { "count": 391 }
+    },
+    "desc": {
+      "rich_text_nodes": [
+        {
+          "orig_text": "ucg.cn将进行备案更新，期间暂时不能访问，APP和小程序也会受影响，等备案更新完成后即可恢复。备案结束后将对APP和小程序的用户进行补偿，详情请见恢复后的公告。在此期间给您带来的不便，我们深感抱歉。",
+          "text": "ucg.cn将进行备案更新，期间暂时不能访问，APP和小程序也会受影响，等备案更新完成后即可恢复。备案结束后将对APP和小程序的用户进行补偿，详情请见恢复后的公告。在此期间给您带来的不便，我们深感抱歉。",
+          "type": "RICH_TEXT_NODE_TYPE_TEXT"
+        }
+      ],
+      "text": "ucg.cn将进行备案更新，期间暂时不能访问，APP和小程序也会受影响，等备案更新完成后即可恢复。备案结束后将对APP和小程序的用户进行补偿，详情请见恢复后的公告。在此期间给您带来的不便，我们深感抱歉。"
+    }
+  },
+  {
+    "type": "DYNAMIC_TYPE_AV",
+    "author": {
+      "mid": 439605619,
+      "face": "http://i1.hdslb.com/bfs/face/2e105c5509562c3e99daefbe5a0af319a42ab039.jpg",
+      "name": "完美世界电竞频道一",
+      "following": true,
+      "official_verify": { "desc": "", "type": 1 },
+      "vip": { "status": 0, "type": 0 },
+      "pub_action": "投稿了视频",
+      "pub_time": "2小时前"
+    },
+    "stat": {
+      "comment": { "count": 1 },
+      "forward": { "count": 1 },
+      "like": { "count": 59 }
+    },
+    "aid": "299544323",
+    "bvid": "BV1kF41157Mn",
+    "cover": "http://i1.hdslb.com/bfs/archive/aea97e6960f67bb36e6397c7de5124af5aef052b.png",
+    "desc": "PNL完美世界CS:GO全国联赛 高校赛道总决赛\r\n恭喜黄河科技学院获得全国总冠军！恭喜上海建桥学院获得全国亚军！",
+    "durationText": "2:35:55",
+    "play": "969",
+    "danmaku": "0",
+    "title": "PNL高校赛 全国总决赛 黄河科技学院 vs 上海建桥学院"
+  },
+  {
+    "type": "DYNAMIC_TYPE_LIVE_RCMD",
+    "author": {
+      "mid": 7375428,
+      "face": "http://i0.hdslb.com/bfs/face/50e8c013bad93ca886a1ae58a3b003ca0b41f114.jpg",
+      "name": "Tocci椭奇",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "直播了",
+      "pub_time": ""
+    },
+    "stat": {
+      "comment": { "count": 0 },
+      "forward": { "count": 0 },
+      "like": { "count": 84 }
+    },
+    "roomId": 424902,
+    "roomType": 0,
+    "title": "【生日会】上舰长有定制T",
+    "areaName": "舞见",
+    "watched": 66908,
+    "watchedText": "6.6万人看过",
+    "cover": "http://i0.hdslb.com/bfs/live/new_room_cover/19c00eee67afe0e065f58c76f3d2bf642cf75424.jpg"
+  },
+  null,
+  {
+    "type": "DYNAMIC_TYPE_LIVE_RCMD",
+    "author": {
+      "mid": 679749,
+      "face": "http://i0.hdslb.com/bfs/face/50f359784a07c96f8128cbe910b7b5dc7d6fa440.jpg",
+      "name": "Diriya伯爵",
+      "following": true,
+      "official_verify": { "desc": "", "type": 0 },
+      "vip": { "status": 1, "type": 2 },
+      "pub_action": "直播了",
+      "pub_time": ""
+    },
+    "stat": {
+      "comment": { "count": 0 },
+      "forward": { "count": 0 },
+      "like": { "count": 3 }
+    },
+    "roomId": 4281469,
+    "roomType": 0,
+    "title": "生2VR",
+    "areaName": "主机游戏",
+    "watched": 1136,
+    "watchedText": "1136人看过",
+    "cover": "http://i0.hdslb.com/bfs/live/new_room_cover/bc68f4f9dae8ac8ed40ebdb0a972e496ff71510b.jpg"
+  },
+  {
+    "type": "DYNAMIC_TYPE_AV",
+    "author": {
+      "mid": 439605619,
+      "face": "http://i1.hdslb.com/bfs/face/2e105c5509562c3e99daefbe5a0af319a42ab039.jpg",
+      "name": "完美世界电竞频道一",
+      "following": true,
+      "official_verify": { "desc": "", "type": 1 },
+      "vip": { "status": 0, "type": 0 },
+      "pub_action": "投稿了视频",
+      "pub_time": "2小时前"
+    },
+    "stat": {
+      "comment": { "count": 0 },
+      "forward": { "count": 0 },
+      "like": { "count": 42 }
+    },
+    "aid": "854622736",
+    "bvid": "BV17L4y1K7DV",
+    "cover": "http://i1.hdslb.com/bfs/archive/89a7ee2e648049305b9bd88c2de768efe4d0ed78.png",
+    "desc": "5.29 PNL完美世界CS:GO全国联赛 高校赛道全国决赛日 败者组决赛录像\r\n黄河科技学院 vs 广东创新科技职业学院",
+    "durationText": "2:48:57",
+    "play": "419",
+    "danmaku": "1",
+    "title": "PNL高校赛 败者组决赛 黄河科技学院 vs 广东创新科技职业学院"
+  }
+]

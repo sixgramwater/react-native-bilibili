@@ -16,6 +16,7 @@ import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
+import DynamicScreen from "../screens/DynamicScreen";
 import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ModalScreen from "../screens/ModalScreen";
@@ -123,12 +124,19 @@ function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
+        name="Dynamic"
+        component={DynamicScreen}
+        options={() => ({
           title: "动态",
           tabBarIcon: ({ color }) => <TabBarIcon name="find" color={color} />,
-          headerShown: false,
+          // headerShown: false,
+          headerShown: true,
+          headerStyle: { backgroundColor: Colors.light.tint },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerTitleStyle: { fontSize: 18 },
+          
+          // headerBackgroundContainerStyle: { height: 24 },
           // headerRight: () => (
           //   <Pressable
           //     onPress={() => navigation.navigate("Modal")}

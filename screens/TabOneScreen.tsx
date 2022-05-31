@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, TextInput } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, TextInput } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
@@ -7,9 +7,10 @@ import { RootTabScreenProps } from "../types";
 import { Button } from "react-native-elements";
 import { fetchDanmuXml, fetchUserNav } from "../api";
 import Danmu, { DanmakuRef, DanmuType } from "../components/danmu";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { parseDanmuToJSON } from "../utils";
+import DynamicItem from "../feature/dynamic/dynamicItem";
 
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = (WIDTH / 16) * 9;
@@ -52,8 +53,12 @@ export default function TabOneScreen({
   // };
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View
+      <ScrollView style={styles.container}>
+        {/* <DynamicItem />
+        <DynamicItem />
+        <DynamicItem /> */}
+
+        {/* <View
           style={{
             height: HEIGHT,
             width: WIDTH,
@@ -62,11 +67,8 @@ export default function TabOneScreen({
           }}
         >
           <Danmu ref={danmukuRef} data={data} />
-          {/* <View style={[StyleSheet.absoluteFill]}>
-          // <Danmu />
-        </View> */}
+         
         </View>
-        {/* <Text style={styles.title}>Tab One</Text> */}
         <Button onPress={() => danmukuRef.current?.play()} title="play" />
         <Button onPress={() => danmukuRef.current?.pause()} title="pause" />
         <Text>isPlaying: {playing ? "true" : "false"}</Text>
@@ -81,21 +83,16 @@ export default function TabOneScreen({
         <Button
           onPress={() => danmukuRef.current?.send({ id: 0 } as any)}
           title="send"
-        />
-        {/* <Vie
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
-      </View>
+        /> */}
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: 'transparent'
+    // flex: 1,
     // alignItems: "center",
     // justifyContent: "center",
   },
