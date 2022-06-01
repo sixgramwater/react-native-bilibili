@@ -1,5 +1,18 @@
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
-import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  Pressable,
+  Platform,
+  UIManager,
+  LayoutAnimation,
+  LayoutChangeEvent,
+  NativeSyntheticEvent,
+  TextLayoutEventData,
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
@@ -8,6 +21,13 @@ import ImageList from "./imageList";
 import ImageView from "react-native-image-viewing";
 
 const WIDTH = Dimensions.get("screen").width;
+
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 export enum DYNAMIC_TYPE {
   LIVE_RCMD = "DYNAMIC_TYPE_LIVE_RCMD",
@@ -236,31 +256,97 @@ export const DrawDynamicItem: React.FC<DrawDynamicItemProps> = (props) => {
   const { items, desc } = props;
   const [visible, setVisible] = useState(false);
   const [openIndex, setOpenIndex] = useState(0);
+  const [collapse, setCollapse] = useState(false);
+  const isFirstCall = useRef(true);
   const previewImgUrls = items.map((item) => {
     return item.src + `@${Math.floor((3 / 4) * WIDTH)}w`;
   });
+  const [isOverflow, setIsOverflow] = useState(false);
   const handleSelect = (index: number) => {
     setOpenIndex(index);
     setVisible(true);
-  }
+  };
+  // useEffect(() => {
+  //   console.log("collpase", collapse);
+  // }, [collapse]);
   const imgsList = items.map((item) => {
     return {
       uri: item.src + `@${Math.floor(WIDTH)}w`,
     };
   });
+  const toggleCollapse = () => {
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setCollapse((collapse) => !collapse);
+  };
 
+  const handleLayout = (e: NativeSyntheticEvent<TextLayoutEventData>) => {
+    if (!isFirstCall) return;
+    isFirstCall.current = false;
+    const lineCount = e.nativeEvent.lines.length;
+    setIsOverflow(lineCount > 4);
+    // console.log(lineCount);
+    // setCollapse(true);
+  };
   return (
     <DynamicItem {...props}>
       <View style={{ paddingVertical: 12 }}>
         <View style={styles.contentContainer}>
-          <Text>{desc.text}</Text>
+          <Text
+            onTextLayout={(e) => handleLayout(e)}
+            numberOfLines={collapse ? 4 : undefined}
+          >
+            {desc.text}
+            {/* {collapse ? (
+              <Text numberOfLines={2}>{desc.text}</Text>
+            ) : (
+              <Text>{desc.text}</Text>
+            )} */}
+          </Text>
+          {/* {isOverflow && (
+            <Text
+              style={{
+                color: Colors.light.blue,
+                marginLeft: "auto",
+                textAlign: "right",
+              }}
+              onPress={toggleCollapse}
+            >
+              {collapse ? "展开" : "收起"}
+            </Text>
+          )} */}
+
+          {/* {!collapse ? (
+            <Text onTextLayout={(e) => handleLayout(e)}>
+              {desc.text}
+              {isOverflow && (
+                <Text
+                  style={{ color: Colors.light.blue }}
+                  onPress={toggleCollapse}
+                >
+                  {collapse ? "展开" : "收起"}
+                </Text>
+              )}
+            </Text>
+          ) : (
+            <Text>
+              {desc.text}
+              {isOverflow && (
+                <Text
+                  style={{ color: Colors.light.blue }}
+                  onPress={toggleCollapse}
+                >
+                  {collapse ? "展开" : "收起"}
+                </Text>
+              )}
+            </Text>
+          )} */}
         </View>
         <View style={{ paddingVertical: 4 }}>
-          <ImageList imgs={previewImgUrls} onSelect={handleSelect}/>
+          <ImageList imgs={previewImgUrls} onSelect={handleSelect} />
         </View>
         <ImageView
           images={imgsList}
-          imageIndex={0}
+          imageIndex={openIndex}
           visible={visible}
           onRequestClose={() => setVisible(false)}
         />
@@ -354,6 +440,7 @@ const styles = StyleSheet.create({
   option: {},
   contentContainer: {
     paddingVertical: 8,
+    // flexDirection: "row",
   },
   controlContainer: {
     flexDirection: "row",
