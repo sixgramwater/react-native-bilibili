@@ -19,6 +19,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import DynamicScreen from "../screens/DynamicScreen";
 import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
+import LiveScreen from "../screens/LiveScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import PlayingScreen from "../screens/PlayingScreen";
@@ -72,6 +73,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Playing"
         component={PlayingScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Live"
+        component={LiveScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -135,7 +141,7 @@ function BottomTabNavigator() {
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           headerTitleStyle: { fontSize: 18 },
-          
+
           // headerBackgroundContainerStyle: { height: 24 },
           // headerRight: () => (
           //   <Pressable

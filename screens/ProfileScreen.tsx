@@ -81,7 +81,12 @@ const ProfileScreen = () => {
       <View style={styles.profileHeader}>
         <View style={styles.controlHeader}>
           <Pressable style={styles.controlIcon}>
-            <Feather name="github" color="#fff" size={22} />
+            <Feather
+              name="github"
+              color="#fff"
+              size={22}
+              onPress={() => navigation.navigate("Live", { roomid: 22778596 })}
+            />
           </Pressable>
           <Pressable style={styles.controlIcon}>
             <AntDesign name="skin" color="#fff" size={22} />

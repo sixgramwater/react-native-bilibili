@@ -20,7 +20,7 @@ export type RootStackParamList = {
   Playing: PlayingParamList | undefined;
   Search: undefined;
   Follow: {mid: number, isMe: boolean};
-
+  Live: { roomid: number }
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
